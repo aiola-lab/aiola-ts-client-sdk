@@ -15,22 +15,22 @@ yarn add @aiola/web-sdk-tts
 ### Node.js (CommonJS)
 
 ```javascript
-const { AiolaTTSClient } = require("@aiola/web-sdk-tts");
+const AiolaTTSClient = require("@aiola/web-sdk-tts");
 
 const ttsClient = new AiolaTTSClient({
- baseUrl: "<BASE_URL>",
- bearer: "<BEARER>"
+  baseUrl: "<BASE_URL>",
+  bearer: "<BEARER>",
 });
 ```
 
 ### Modern JavaScript (ES Modules)
 
 ```javascript
-import { AiolaTTSClient } from "@aiola/web-sdk-tts";
+import AiolaTTSClient from "@aiola/web-sdk-tts";
 
 const ttsClient = new AiolaTTSClient({
- baseUrl: "<BASE_URL>",
- bearer: "<BEARER>"
+  baseUrl: "<BASE_URL>",
+  bearer: "<BEARER>",
 });
 ```
 
@@ -93,7 +93,7 @@ const audioBlob = await clientWithDefault.synthesizeSpeech(
   voices.Bella
 );
 
-// Playing the audio 
+// Playing the audio
 const url = URL.createObjectURL(blob);
 audioPlayer.src = url;
 audioPlayer.style.display = "block";
@@ -147,4 +147,3 @@ See [LICENSE](LICENSE) file for details.
 ## Support
 
 For any issues or questions regarding the aiOla TTS SDK, please [contact us](https://aiOla.ai/contact/)
-
