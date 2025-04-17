@@ -2,6 +2,11 @@
 
 This is a demonstration application showcasing the aiOla Speech-to-Text capabilities using the aiOla JavaScript SDK.
 
+<div style="display: flex; gap: 20px; justify-content: center;">
+  <img src="https://github.com/user-attachments/assets/1b97d1f8-64ad-454a-81b9-c76d82e2de58" alt="stt" style="max-width: 80%; border: 2px solid #0e9375; border-radius: 8px;">
+</div>
+
+
 ## Features
 
 - Real-time speech-to-text transcription
@@ -9,8 +14,6 @@ This is a demonstration application showcasing the aiOla Speech-to-Text capabili
 - Simple and intuitive UI
 - WebSocket-based communication
 - Microphone input 
-
-![stt](https://github.com/user-attachments/assets/1b97d1f8-64ad-454a-81b9-c76d82e2de58)
 
 ## Prerequisites
 

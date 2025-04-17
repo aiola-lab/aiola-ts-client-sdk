@@ -2,6 +2,11 @@
 
 Aiola Speech-To-Text JavaScript SDK
 
+<div style="display: flex; gap: 20px; justify-content: center;">
+  <img src="https://github.com/user-attachments/assets/1b97d1f8-64ad-454a-81b9-c76d82e2de58" alt="stt" style="max-width: 60%; border: 2px solid #0e9375; border-radius: 8px;">
+</div>
+
+example code can be found [here](https://github.com/aiola-lab/aiola-js-sdk-internal/tree/main/examples/stt-demo)
 
 ## Installation
 

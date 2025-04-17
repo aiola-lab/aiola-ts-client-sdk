@@ -2,6 +2,10 @@
 
 This is a demonstration of the Aiola Text-to-Speech (TTS) SDK capabilities. The demo provides a simple web interface where you can convert text to speech using different voices, with options for both regular synthesis and streaming.
 
+<div style="display: flex; gap: 20px; justify-content: center;">
+  <img src="https://github.com/user-attachments/assets/1745bf3b-ac9c-43a9-a783-7608c34e490e" alt="tts" style="max-width: 80%; border: 2px solid #0e9375; border-radius: 8px;">
+</div>
+
 ## Features
 
 - Text-to-speech conversion
@@ -11,7 +15,7 @@ This is a demonstration of the Aiola Text-to-Speech (TTS) SDK capabilities. The 
   - Streaming synthesis (real-time streaming)
 - Audio playback controls
 
-![tts](https://github.com/user-attachments/assets/1745bf3b-ac9c-43a9-a783-7608c34e490e)
+
 
 
 ## Prerequisites
