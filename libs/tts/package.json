@@ -1,0 +1,52 @@
+{
+  "name": "@aiola/web-sdk-tts",
+  "version": "0.1.4",
+  "description": "Aiola Text-to-Speech JavaScript SDK",
+  "homepage": "https://aiola.ai/",
+  "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "browser": "dist/bundle/index.js",
+  "types": "dist/types/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aiola-lab/aiola-ts-client-sdk.git"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "browser": "./dist/bundle/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:clean && npm run build:esm && npm run build:cjs && npm run build:bundle && npm run build:types",
+    "build:clean": "rimraf dist",
+    "build:esm": "tsc -p tsconfig.json --outDir dist/esm --module ES2015 --sourceMap",
+    "build:cjs": "tsc -p tsconfig.json --outDir dist/cjs --module CommonJS --sourceMap",
+    "build:bundle": "esbuild src/index.ts --bundle --format=esm --outfile=dist/bundle/index.js --sourcemap --minify",
+    "build:types": "tsc -p tsconfig.json --declaration --emitDeclarationOnly --outDir dist/types",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "aiola",
+    "sdk",
+    "text-to-speech",
+    "tts"
+  ],
+  "author": "aiOla",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.1"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "stt-demo",
+  "type": "module",
+  "dependencies": {
+    "@aiola/web-sdk-stt": "0.1.0"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "tts-demo",
+  "type": "module",
+  "dependencies": {
+    "@aiola/web-sdk-tts": "0.1.0"
+  }
+}
