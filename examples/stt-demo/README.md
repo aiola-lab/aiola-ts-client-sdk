@@ -8,9 +8,9 @@ This is a demonstration application showcasing the aiOla Speech-to-Text capabili
 - Keyword detection
 - Simple and intuitive UI
 - WebSocket-based communication
-- Microphone input support
+- Microphone input 
 
-![stt](https://github.com/user-attachments/assets/04f2f2bc-30b1-4ad1-84e8-037260a30481)
+![stt](https://github.com/user-attachments/assets/1b97d1f8-64ad-454a-81b9-c76d82e2de58)
 
 ## Prerequisites
 
