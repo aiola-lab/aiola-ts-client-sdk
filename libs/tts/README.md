@@ -6,7 +6,7 @@ Aiola Text-to-Speech JavaScript SDK
   <img src="https://github.com/user-attachments/assets/1745bf3b-ac9c-43a9-a783-7608c34e490e" alt="tts" style="max-width: 60%; border: 2px solid #0e9375; border-radius: 8px;">
 </div>
 
-example code can be found [here](https://github.com/aiola-lab/aiola-js-sdk-internal/tree/main/examples/tts-demo)
+example code can be found [here](https://github.com/aiola-lab/aiola-ts-client-sdk/tree/main/examples/tts-demo)
 ## Installation
 
 ```bash
