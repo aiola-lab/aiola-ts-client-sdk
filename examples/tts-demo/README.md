@@ -11,7 +11,7 @@ This is a demonstration of the Aiola Text-to-Speech (TTS) SDK capabilities. The 
   - Streaming synthesis (real-time streaming)
 - Audio playback controls
 
-![tts](https://github.com/user-attachments/assets/006a99ad-1bc3-4a76-b4b8-ffe34d094fb8)
+![tts](https://github.com/user-attachments/assets/1745bf3b-ac9c-43a9-a783-7608c34e490e)
 
 
 ## Prerequisites
