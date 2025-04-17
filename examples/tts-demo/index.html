@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <title>Aiola TTS Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+     <script type="importmap">
+      {
+        "imports": {
+          "@aiola/web-sdk-tts": "./node_modules/@aiola/web-sdk-tts/dist/bundle/index.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Aiola Text-to-Speech Demo</h1>
+
+    <div>
+      <textarea id="textInput" placeholder="Enter text to convert to speech...">
+Hello, welcome to Aiola Text-to-Speech demo!</textarea
+      >
+    </div>
+
+    <div class="controls">
+      <select id="voiceSelect">
+        <option value="af">af</option>
+        <option value="af_bella">af_bella</option>
+      </select>
+      <button id="synthesizeBtn">Synthesize</button>
+      <button id="streamBtn">Stream</button>
+    </div>
+
+    <audio id="audioPlayer" controls style="display: none"></audio>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

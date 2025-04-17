@@ -1,0 +1,29 @@
+{
+  "name": "@aiola-sdk",
+  "private": true,
+  "workspaces": [
+    "libs/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "type-check": "npm run type-check --workspaces",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "serve": "http-server -p 3000",
+    "reinstall": "npm rm -rf node_modules && npm i",
+    "clb": "npm run reinstall && npm run build"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.19",
+    "http-server": "^14.1.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "rimraf": "^5.0.5",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3",
+    "web-streams-polyfill": "^4.1.0",
+    "whatwg-fetch": "^3.6.20"
+  }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <title>Aiola STT Demo</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@aiola/web-sdk-stt": "./node_modules/@aiola/web-sdk-stt/dist/bundle/index.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Aiola Speech-To-Text Demo</h1>
+
+    <div class="toggle-container">
+      <div class="toggle-group">
+        <div id="socketToggle" class="toggle-button">
+          <i class="ti ti-plug-connected-x"></i>
+        </div>
+      </div>
+      <div class="toggle-group">
+        <div id="recordingToggle" class="toggle-button">
+          <i class="ti ti-microphone-off"></i>
+        </div>
+      </div>
+      <span class="separator">|</span>
+      <div class="message-container" id="messageContainer">
+        Ready to connect
+      </div>
+    </div>
+
+    <div class="keywords-container">
+      <input
+        type="text"
+        id="keywordsInput"
+        class="keywords-input"
+        placeholder="Enter keywords (comma-separated)"
+      />
+      <button id="setKeywordsButton" class="keywords-button">
+        Set Keywords
+      </button>
+    </div>
+
+    <div id="transcript"></div>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
