@@ -7,7 +7,7 @@ This repository contains the official JavaScript/TypeScript SDKs for Aiola's ser
 ### Speech-to-Text (STT)
 
 ```bash
-npm install @aiola/stt
+npm i @aiola/web-sdk-stt
 ```
 
 ```typescript
@@ -107,7 +107,7 @@ interface AiolaSocketConfig {
 ### Text-to-Speech (TTS)
 
 ```bash
-npm install @aiola/tts
+npm i @aiola/web-sdk-tts
 ```
 
 ```typescript
