@@ -52,10 +52,10 @@ export default class AiolaTTSClient {
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${this.config.bearer}`,
           },
-          body: new URLSearchParams(data),
+          body: JSON.stringify(data),
         }
       );
 

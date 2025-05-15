@@ -1,6 +1,6 @@
 {
   "name": "@aiola/web-sdk-tts",
-  "version": "0.1.4",
+  "version": "1.0.1",
   "description": "Aiola Text-to-Speech JavaScript SDK",
   "homepage": "https://aiola.ai/",
   "type": "module",
