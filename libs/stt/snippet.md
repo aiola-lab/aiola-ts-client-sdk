@@ -1,19 +1,3 @@
-# @aiola/web-sdk-stt
-
-Aiola Speech-To-Text JavaScript SDK
-
-<div style="display: flex; gap: 20px; justify-content: center;">
-  <img src="https://github.com/user-attachments/assets/1b97d1f8-64ad-454a-81b9-c76d82e2de58" alt="tts" style="max-width: 60%; border: 2px solid #0e9375; border-radius: 8px;">
-</div>
-
-example code can be found [here](https://github.com/aiola-lab/aiola-ts-client-sdk/tree/main/examples/stt-demo)
-
-#### Install
-```bash
-npm i @aiola/web-sdk-stt
-```
-
-#### quick start
 ```typescript
 import {
   AiolaStreamingClient,
@@ -61,26 +45,3 @@ client.setKeywords(['aiola', 'api', 'testing']);
 // start recording
 client.startRecording();
 ```
-
-#### Connection and Recording
-
-The STT client provides two ways to start recording:
-
-1. Manual start:
-
-```typescript
-// First connect
-client.connect();
-
-// Then start recording when ready
-await client.startRecording();
-```
-
-## License
-
-See [LICENSE](LICENSE) file for details.
-
-## Support
-
-For any issues or questions regarding the aiOla STT SDK, please [contact us](https://aiOla.ai/contact/)
-
