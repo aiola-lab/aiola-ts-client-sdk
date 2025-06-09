@@ -22,6 +22,7 @@ Navigate to `examples` and navigate to wanted example:
 
 <img src="https://github.com/user-attachments/assets/1745bf3b-ac9c-43a9-a783-7608c34e490e
 " alt="stt" width="400">
+
 [stt example code](https://github.com/aiola-lab/aiola-ts-client-sdk/tree/main/examples/stt-demo) | [tts example code](https://github.com/aiola-lab/aiola-ts-client-sdk/tree/main/examples/tts-demo)
 ## SDKs
 
