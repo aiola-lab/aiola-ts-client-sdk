@@ -2,12 +2,14 @@
 
 Aiola Speech-To-Text JavaScript SDK
 
-#### Install
+## Speech-To-Text (STT)
+
+### Install
 ```bash
 npm i @aiola/web-sdk-stt
 ```
 
-#### Quick start
+### Quick start
 ```typescript
 import {
   AiolaStreamingClient,
@@ -56,11 +58,11 @@ client.setKeywords(['aiola', 'api', 'testing']);
 client.startRecording();
 ```
 
-#### Connection and Recording
+### Connection and Recording
 
 The STT client provides two ways to start recording:
 
-###### 1. Manual start:
+#### 1. Manual start:
 
 ```typescript
 // First connect
@@ -70,7 +72,7 @@ client.connect();
 await client.startRecording();
 ```
 
-###### 2. Automatic start
+#### 2. Automatic start
 ```typescript
 client.connect(true);
 ```

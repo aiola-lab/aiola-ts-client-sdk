@@ -2,14 +2,14 @@
 Aiola Text-to-Speech Typescript SDK
 
 
-### Text-to-Speech (TTS)
+## Text-to-Speech (TTS)
 
-#### Install
+### Install
 ```bash
 npm i @aiola/web-sdk-tts
 ```
 
-#### Quick start
+### Quick start
 
 
 ```typescript
@@ -56,7 +56,7 @@ const streamBlob = await clientWithDefault.streamSpeech(
 );
 ```
 
-##### TTSConfig Interface
+### TTSConfig Interface
 
 ```typescript
 interface TTSConfig {
@@ -65,7 +65,7 @@ interface TTSConfig {
   defaultVoice?: string; // Optional default voice. If not provided, voice must be specified in method calls
 }
 ```
-##### Available Voices
+### Available Voices
 
 ```typescript
 // Get available voices
