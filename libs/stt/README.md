@@ -2,10 +2,6 @@
 
 Aiola Speech-To-Text JavaScript SDK
 
-<img src="https://github.com/user-attachments/assets/1b97d1f8-64ad-454a-81b9-c76d82e2de58" alt="tts" width='200'>
-
-example code can be found [here](https://github.com/aiola-lab/aiola-ts-client-sdk/tree/main/examples/stt-demo)
-
 #### Install
 ```bash
 npm i @aiola/web-sdk-stt

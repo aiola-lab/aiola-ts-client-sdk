@@ -17,14 +17,10 @@ Navigate to `examples` and navigate to wanted example:
    - For STT examples: `http://localhost:3000/examples/stt`
    - For TTS examples: `http://localhost:3000/examples/tts`
 
-
-<div style="display: flex; gap: 20px; justify-content: center;">
-  <img src="https://github.com/user-attachments/assets/1b97d1f8-64ad-454a-81b9-c76d82e2de58
-" alt="stt" style="max-width: 50%;">
- <img src="https://github.com/user-attachments/assets/1745bf3b-ac9c-43a9-a783-7608c34e490e
-" alt="stt" style="max-width: 50%;">
-</div>
-
+<img src="https://github.com/user-attachments/assets/1b97d1f8-64ad-454a-81b9-c76d82e2de58
+" alt="stt" width="400"> <img src="https://github.com/user-attachments/assets/1745bf3b-ac9c-43a9-a783-7608c34e490e
+" alt="stt" width="400">
+[stt example code](https://github.com/aiola-lab/aiola-ts-client-sdk/tree/main/examples/stt-demo) | [tts example code](https://github.com/aiola-lab/aiola-ts-client-sdk/tree/main/examples/tts-demo)
 ## SDKs
 
 - [aiola-tts](libs/tts/README.md): Text-to-Speech SDK
