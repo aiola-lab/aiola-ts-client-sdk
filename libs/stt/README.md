@@ -7,7 +7,7 @@ Aiola Speech-To-Text JavaScript SDK
 npm i @aiola/web-sdk-stt
 ```
 
-#### quick start
+#### Quick start
 ```typescript
 import {
   AiolaStreamingClient,
@@ -60,7 +60,7 @@ client.startRecording();
 
 The STT client provides two ways to start recording:
 
-1. Manual start:
+###### 1. Manual start:
 
 ```typescript
 // First connect
@@ -68,6 +68,49 @@ client.connect();
 
 // Then start recording when ready
 await client.startRecording();
+```
+
+###### 2. Automatic start
+```typescript
+client.connect(true);
+```
+
+
+
+### Configuration Reference
+#### AiolaSocketConfig
+
+```typescript
+interface AiolaSocketConfig {
+  baseUrl: string; // The base URL of the Aiola API
+  namespace: AiolaSocketNamespace; // The namespace to connect to
+  bearer: string; // Authentication token
+  queryParams: {
+    // Query parameters for the connection
+    flow_id: string; // The flow ID to use
+    execution_id: string; // Execution ID for the session
+    lang_code: string; // Language code (e.g., "en_US")
+    time_zone: string; // Time zone (e.g., "UTC")
+    [key: string]: string; // Additional custom parameters
+  };
+  micConfig?: {
+    // Optional microphone configuration
+    sampleRate: number; // Default: 16000
+    chunkSize: number; // Default: 4096
+    channels: number; // Default: 1
+  };
+  events: {
+    // Event handlers
+    onTranscript: (data: any) => void; // Called when transcript is received
+    onEvents: (data: any) => void; // Called for other events
+    onConnect?: () => void; // Called when connected
+    onStartRecord?: () => void; // Called when recording starts (only after permissions are granted)
+    onStopRecord?: () => void; // Called when recording stops (only if recording was started)
+    onKeyWordSet?: (keywords: string[]) => void; // Called when keywords are set
+    onError?: (error: AiolaSocketError) => void; // Called on errors, including permission denied
+  };
+  transports?: "polling" | "websocket" | "all"; // Transport method to use
+}
 ```
 
 ## License

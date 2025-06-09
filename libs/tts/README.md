@@ -9,7 +9,7 @@ Aiola Text-to-Speech Typescript SDK
 npm i @aiola/web-sdk-tts
 ```
 
-#### quick start
+#### Quick start
 
 
 ```typescript
