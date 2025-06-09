@@ -8,7 +8,15 @@ This repository contains the official JavaScript/TypeScript SDKs for Aiola's voi
 
 Want to try out the playground? Just clone and run:
 
-`. ./scripts/build_examples.sh `
+```bash
+npm install
+npm run build
+npm run serve
+```
+Navigate to `examples` and navigate to wanted example:
+   - For STT examples: `http://localhost:3000/examples/stt`
+   - For TTS examples: `http://localhost:3000/examples/tts`
+
 
 <div style="display: flex; gap: 20px; justify-content: center;">
   <img src="https://github.com/user-attachments/assets/1b97d1f8-64ad-454a-81b9-c76d82e2de58
