@@ -10,6 +10,7 @@ npm i @aiola/web-sdk-stt
 ```
 
 ### Quick start
+<!--snippet;quickstart-->
 ```typescript
 import {
   AiolaStreamingClient,
