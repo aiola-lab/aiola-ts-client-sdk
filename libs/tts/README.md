@@ -1,88 +1,28 @@
 # @aiola/web-sdk-tts
+Aiola Text-to-Speech Typescript SDK
 
-Aiola Text-to-Speech JavaScript SDK
 
-<div style="display: flex; gap: 20px; justify-content: center;">
-  <img src="https://github.com/user-attachments/assets/1745bf3b-ac9c-43a9-a783-7608c34e490e" alt="tts" style="max-width: 60%; border: 2px solid #0e9375; border-radius: 8px;">
-</div>
+## Text-to-Speech (TTS)
 
-example code can be found [here](https://github.com/aiola-lab/aiola-ts-client-sdk/tree/main/examples/tts-demo)
-## Installation
-
+### Install
 ```bash
-npm install @aiola/web-sdk-tts
-# or
-yarn add @aiola/web-sdk-tts
+npm i @aiola/web-sdk-tts
 ```
 
-## Usage
+### Quick start
 
-### Node.js (CommonJS)
-
-```javascript
-const AiolaTTSClient = require("@aiola/web-sdk-tts");
-
-const ttsClient = new AiolaTTSClient({
-  baseUrl: "<BASE_URL>",
-  bearer: "<BEARER>",
-});
-```
-
-### Modern JavaScript (ES Modules)
-
-```javascript
-import AiolaTTSClient from "@aiola/web-sdk-tts";
-
-const ttsClient = new AiolaTTSClient({
-  baseUrl: "<BASE_URL>",
-  bearer: "<BEARER>",
-});
-```
-
-### Browser (Direct Usage)
-
-```html
- <script type="importmap">
-    {
-        "imports": {
-          "@aiola/web-sdk-tts": "./node_modules/@aiola/web-sdk-tts/dist/bundle/index.js"
-        }
-    }
-</script>
-</script>
-```
-
-## API Documentation
-
-```bash
-npm install @aiola/web-sdk-tts
-```
 
 ```typescript
-import AiolaTTSClient from "@aiola/web-sdk-tts";
+import AiolaTTSClient from "@aiola/tts";
 
 // First create the client
-const ttsClient = new AiolaTTSClient({
-  baseUrl: "https://your-aiola-endpoint.com",
-  bearer: "your-auth-token",
+const client = new AiolaTTSClient({
+  baseUrl: "https://api.aiola.ai", // for enterprises, use custom endpoint
+  bearer: "<API-KEY>",
 });
 
-// Get available voices
-const voices = ttsClient.getVoices();
-// Returns:
-// {
-//   Default: "af",
-//   Bella: "af_bella",
-//   Nicole: "af_nicole",
-//   Sarah: "af_sarah",
-//   Sky: "af_sky",
-//   Adam: "am_adam",
-//   Michael: "am_michael",
-//   Emma: "bf_emma",
-//   Isabella: "bf_isabella",
-//   George: "bm_george",
-//   Lewis: "bm_lewis"
-// }
+//Get all voices
+const voices = client.getVoices()
 
 // Create a client with default voice using getVoices()
 const clientWithDefault = new AiolaTTSClient({
@@ -97,12 +37,6 @@ const audioBlob = await clientWithDefault.synthesizeSpeech(
   "Hello, world!",
   voices.Bella
 );
-
-// Playing the audio
-const url = URL.createObjectURL(blob);
-audioPlayer.src = url;
-audioPlayer.style.display = "block";
-audioPlayer.play();
 
 // Using defaultVoice from config
 const audioBlob2 = await clientWithDefault.synthesizeSpeech("Hello, world!");
@@ -122,7 +56,7 @@ const streamBlob = await clientWithDefault.streamSpeech(
 );
 ```
 
-#### TTSConfig Interface
+### TTSConfig Interface
 
 ```typescript
 interface TTSConfig {
@@ -131,18 +65,25 @@ interface TTSConfig {
   defaultVoice?: string; // Optional default voice. If not provided, voice must be specified in method calls
 }
 ```
+### Available Voices
 
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Build the package
-npm run build
-
-# Run type checking
-npm run type-check
+```typescript
+// Get available voices
+const voices = client.getVoices();
+// Returns:
+// {
+//   Default: "af",
+//   Bella: "af_bella",
+//   Nicole: "af_nicole",
+//   Sarah: "af_sarah",
+//   Sky: "af_sky",
+//   Adam: "am_adam",
+//   Michael: "am_michael",
+//   Emma: "bf_emma",
+//   Isabella: "bf_isabella",
+//   George: "bm_george",
+//   Lewis: "bm_lewis"
+// }
 ```
 
 ## License
