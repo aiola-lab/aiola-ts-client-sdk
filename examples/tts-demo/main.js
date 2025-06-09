@@ -2,7 +2,7 @@ import AiolaTTSClient from "@aiola/web-sdk-tts";
 
 const client = new AiolaTTSClient({
   baseUrl: "https://api.aiola.ai",
-  bearer: "<YOUR_BEARER_TOKEN>"
+  bearer: "qLDczk3BESZt2vcU1Tqqb1sSJ9DjsKYGygKdRPhLSg0p", //Playground token - Limited usage!!
 });
 
 const textInput = document.getElementById("textInput");
