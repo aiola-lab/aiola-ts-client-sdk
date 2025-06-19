@@ -2,15 +2,18 @@
   "name": "@aiola-sdk",
   "private": true,
   "workspaces": [
-    "libs/*"
+    "libs/*",
+    "examples/stt-demo",
+    "examples/tts-demo"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
-    "type-check": "npm run type-check --workspaces",
+    "install:all": "npm install --workspaces",
+    "build": "npm run build --workspaces --if-present --workspace=libs/stt --workspace=libs/tts",
     "test": "jest",
     "test:watch": "jest --watch",
     "serve": "http-server -p 3000",
-    "reinstall": "npm rm -rf node_modules && npm i",
+    "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf {} +",
+    "reinstall": "npm run clean && npm run install:all",
     "clb": "npm run reinstall && npm run build"
   },
   "devDependencies": {

@@ -9,7 +9,7 @@ This repository contains the official JavaScript/TypeScript SDKs for Aiola's voi
 Want to try out the playground? Just clone and run:
 
 ```bash
-npm install
+npm run install:all
 npm run build
 npm run serve
 ```
