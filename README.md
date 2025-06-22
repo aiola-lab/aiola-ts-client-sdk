@@ -9,7 +9,7 @@ This repository contains the official JavaScript/TypeScript SDKs for Aiola's voi
 Want to try out the playground? Just clone and run:
 
 ```bash
-npm install
+npm run install:all
 npm run build
 npm run serve
 ```
@@ -106,7 +106,7 @@ client.startRecording();
 | Real-time speech transcription                            | Convert text to speech and save as WAV files          |
 | Keyword spotting                                          | Real-time streaming of synthesized speech             |
 | Event-driven architecture                                 | Multiple voice options available                      |
-| Multiple language support (en-US, de-DE, fr-FR, zh-ZH, es-ES, pt-PT)                                                          | Support for different audio formats (LINEAR16, PCM)   |
+| Multiple language support (en_US, de_DE, fr_FR, zh_ZH, es_ES, pt_PT)                                                          | Support for different audio formats (LINEAR16, PCM)   |
 
 
 ## License
