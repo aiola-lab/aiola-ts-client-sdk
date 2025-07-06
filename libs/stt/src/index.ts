@@ -12,6 +12,9 @@ export class AiolaStreamingClient {
   };
   private activeKeywords: string[] = [];
   private isStoppingRecording: boolean = false;
+  private isConnecting: boolean = false;
+  private new_baseUrl_default = "https://voice.aiola-trw.click"; //FIXME with real env
+  private baseUrl_default = "https://api.aiola.ai";
 
   constructor(config: AiolaSocketConfig) {
     // Set default micConfig values if not provided
@@ -53,87 +56,191 @@ export class AiolaStreamingClient {
   /**
    * Connect to the aiOla streaming service
    */
-  public connect(autoRecord = false): void {
-    const { bearer, transports, events } = this.config;
+  public async connect(autoRecord = false): Promise<void> {
+    // Prevent multiple simultaneous connection attempts
+    if (this.isConnecting) {
+      return;
+    }
+
+    if (this.socket?.connected) {
+      return;
+    }
+
+    this.isConnecting = true;
+
+    try {
+      const { bearer, transports, events } = this.config;
+      // Clean up any existing socket connection
+      this.cleanupSocket();
+
+      this.socket = await this.makeSocket(bearer, transports);
+
+      if (!this.socket) {
+        this.handleError(
+          "Failed to initialize socket connection",
+          AiolaSocketErrorCode.NETWORK_ERROR
+        );
+        return;
+      }
+
+      this.socket.on("connect", () => {
+        const transportName = this.socket?.io?.engine?.transport?.name;
+
+        if (transportName === "polling" || transportName === "websocket") {
+          events.onConnect?.(transportName);
+        } else {
+          console.warn("Unexpected transport name:", transportName);
+        }
+
+        if (autoRecord) {
+          this.startRecording();
+        }
+
+        // If there are active keywords, resend them on reconnection
+        if (this.activeKeywords.length > 0) {
+          this.setKeywords(this.activeKeywords);
+        }
+      });
+
+      this.socket.on("error", (error) => {
+        console.error("Socket error:", error);
+        this.stopRecording();
+        this.handleError(
+          `Socket error: ${error.message}`,
+          AiolaSocketErrorCode.GENERAL_ERROR,
+          { originalError: error }
+        );
+      });
+
+      this.socket.on("connect_error", (error: any) => {
+        console.error("Socket connection error:", error);
+        console.error("Connection error details:", {
+          type: error.type,
+          description: error.description,
+          context: error.context,
+          transport: this.socket?.io?.engine?.transport?.name,
+          error: error.message,
+        });
+        this.stopRecording();
+        this.closeSocket();
+        this.handleError(
+          `Socket connection error: ${error.message}`,
+          AiolaSocketErrorCode.NETWORK_ERROR,
+          { originalError: error }
+        );
+      });
+
+      this.socket.on("disconnect", () => {
+        this.cleanupSocket();
+      });
+
+
+      this.socket.io?.on("upgradeError" as any, (error: any) => {
+        console.error("❌ Transport upgrade failed:", error);
+      });
+
+      this.socket.io?.on("reconnect_error" as any, (error: any) => {
+        console.error("❌ Reconnection failed:", error);
+      });
+
+      this.socket.on("transcript", events.onTranscript ?? (() => {}));
+      this.socket.on("events", events.onEvents ?? (() => {}));
+    } finally {
+      this.isConnecting = false;
+    }
+  }
+  private async makeSocket(
+    bearer: string,
+    transports?: "polling" | "websocket" | "all"
+  ): Promise<Socket> {
     const _bearer = `Bearer ${bearer}`;
     const _transports =
       transports === "polling" ? ["polling"] : ["polling", "websocket"];
 
-    // Clean up any existing socket connection
-    this.cleanupSocket();
+    try {
+      let sessionToken = await this.initializeWithApiKey(
+        bearer,
+        this.config.queryParams.flow_id
+      )
+        .then((token) => {
+          return token;
+        })
+        .catch((err: Error) => {
+          console.error("❌ New auth flow failed:", err.message);
+          throw err;
+        });
 
-    this.socket = io(this.buildEndpoint(), {
-      withCredentials: true,
-      path: this.buildPath(),
-      query: {
-        ...this.config.queryParams,
-        'x-aiola-api-key': bearer,
-      },
-      transports: _transports,
-      transportOptions: {
-        polling: {
-          extraHeaders: { Authorization: _bearer },
+      const socketConfig = {
+        withCredentials: true,
+        path: this.buildPath(),
+        query: {
+          execution_id: this.config.queryParams.execution_id,
+          "x-aiola-api-token": sessionToken,
         },
-        websocket: {
-          extraHeaders: { Authorization: _bearer },
+        extraHeaders: {
+          "X-Execution-Id": this.config.queryParams.execution_id,
+          "X-Workflow-Id": this.config.queryParams.flow_id,
+          "x-lang-code": this.config.queryParams.lang_code,
+          "x-time-zone": this.config.queryParams.time_zone,
+          Authorization: `Bearer ${sessionToken}`,
         },
-      },
-    });
+        transports: _transports,
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              "X-Execution-Id": this.config.queryParams.execution_id,
+              "X-Workflow-Id": this.config.queryParams.flow_id,
+              "x-lang-code": this.config.queryParams.lang_code,
+              "x-time-zone": this.config.queryParams.time_zone,
+              Authorization: `Bearer ${sessionToken}`,
+            },
+          },
+          websocket: {
+            extraHeaders: {
+              "X-Execution-Id": this.config.queryParams.execution_id,
+              "X-Workflow-Id": this.config.queryParams.flow_id,
+              "x-lang-code": this.config.queryParams.lang_code,
+              "x-time-zone": this.config.queryParams.time_zone,
+              Authorization: `Bearer ${sessionToken}`,
+              "x-aiola-api-token": sessionToken,
+            },
+          },
+        },
+        // Add timeout and force new connection for debugging
+        timeout: 20000,
+        forceNew: true,
+      };
 
-    if (!this.socket) {
-      this.handleError(
-        "Failed to initialize socket connection",
-        AiolaSocketErrorCode.NETWORK_ERROR
-      );
-      return;
+      return io(this.buildEndpoint(), socketConfig);
+    } catch (error) {
+      console.warn("⚠️ New auth failed, falling back to old auth:", error);
+      console.warn("fallback to old auth:");
+
+      const fallbackConfig = {
+        withCredentials: true,
+        path: this.buildPath(),
+        query: {
+          ...this.config.queryParams,
+          "x-aiola-api-key": bearer,
+        },
+        extraHeaders: {
+          Authorization: _bearer,
+        },
+        transports: _transports,
+        transportOptions: {
+          polling: {
+            extraHeaders: { Authorization: _bearer },
+          },
+          websocket: {
+            extraHeaders: { Authorization: _bearer },
+          },
+        },
+        timeout: 20000,
+        forceNew: true,
+      };
+
+      return io(this.buildEndpoint(false), fallbackConfig);
     }
-
-    this.socket.on("connect", () => {
-      const transportName = this.socket?.io?.engine?.transport?.name;
-
-      if (transportName === "polling" || transportName === "websocket") {
-        events.onConnect?.(transportName);
-      } else {
-        console.warn("Unexpected transport name:", transportName);
-      }
-
-      if (autoRecord) {
-        this.startRecording();
-      }
-
-      // If there are active keywords, resend them on reconnection
-      if (this.activeKeywords.length > 0) {
-        this.setKeywords(this.activeKeywords);
-      }
-    });
-
-    this.socket.on("error", (error) => {
-      console.error("Socket error:", error);
-      this.stopRecording();
-      this.handleError(
-        `Socket error: ${error.message}`,
-        AiolaSocketErrorCode.GENERAL_ERROR,
-        { originalError: error }
-      );
-    });
-
-    this.socket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
-      this.stopRecording();
-      this.closeSocket();
-      this.handleError(
-        `Socket connection error: ${error.message}`,
-        AiolaSocketErrorCode.NETWORK_ERROR,
-        { originalError: error }
-      );
-    });
-
-    this.socket.on("disconnect", () => {
-      this.cleanupSocket();
-    });
-
-    this.socket.on("transcript", events.onTranscript ?? (() => {}));
-    this.socket.on("events", events.onEvents ?? (() => {}));
   }
 
   private cleanupSocket(): void {
@@ -152,6 +259,73 @@ export class AiolaStreamingClient {
       // Clear the socket reference
       this.socket = null;
     }
+  }
+  private async initializeWithApiKey(
+    apiKey: string,
+    workflowId: string
+  ): Promise<string> {
+    const apiKeyToken = await this.apiKeyToToken(apiKey);
+    return await this.createSession(apiKeyToken, workflowId);
+  }
+
+  private apiKeyToToken(apiKey: string): Promise<string> {
+    const url =
+      "https://9kvtyeuq5h.execute-api.eu-west-1.amazonaws.com/voip-auth/apiKey2Token";
+
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data.context?.token) {
+          return data.context.token;
+        }
+        throw new Error(
+          "Invalid token response - no token found in data.context.token"
+        );
+      })
+      .catch((error) => {
+        console.error("❌ apiKeyToToken failed:", error);
+        throw error;
+      });
+  }
+
+  private createSession(token: string, workflowId: string): Promise<string> {
+    const url =
+      "https://9kvtyeuq5h.execute-api.eu-west-1.amazonaws.com/voip-auth/session";
+
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ workflow_id: workflowId }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data.jwt) {
+          return data.jwt;
+        }
+        throw new Error("Invalid session response - no jwt found");
+      })
+      .catch((error) => {
+        console.error("❌ createSession failed:", error);
+        throw error;
+      });
   }
 
   public closeSocket(): void {
@@ -490,8 +664,11 @@ export class AiolaStreamingClient {
 
   //---- Private methods ----//
 
-  private buildEndpoint(): string {
-    return `${this.config.baseUrl}${this.config.namespace}`;
+  private buildEndpoint(newAuth = true): string {
+    let url = newAuth
+      ? this.new_baseUrl_default
+      : this.config.baseUrl || this.baseUrl_default;
+    return `${url}${this.config.namespace}`;
   }
 
   private buildPath(): string {
@@ -511,7 +688,7 @@ export class AiolaStreamingClient {
  * Configuration for the aiOla streaming client
  */
 export interface AiolaSocketConfig {
-  baseUrl: string;
+  baseUrl?: string;
   namespace: AiolaSocketNamespace;
   bearer: string;
   queryParams: Record<string, string>;

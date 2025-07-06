@@ -18,6 +18,11 @@ const recordingToggle = document.getElementById("recordingToggle");
 const keywordsInput = document.getElementById("keywordsInput");
 const setKeywordsButton = document.getElementById("setKeywordsButton");
 
+// Add a flag to prevent multiple event listeners
+let eventListenersAttached = false;
+let isSocketToggleProcessing = false;
+let isRecordingToggleProcessing = false;
+
 function showMessage(message, isError = false) {
   messageContainer.innerHTML = `<span class="${
     isError ? "error" : ""
@@ -175,52 +180,89 @@ const client = new AiolaStreamingClient({
   },
 });
 
-socketToggle.addEventListener("click", async () => {
-  console.log("socketToggle clicked");
-  const isConnected = socketToggle.classList.contains("active");
-  try {
-    if (isConnected) {
-      client.closeSocket();
+// Only attach event listeners once
+if (!eventListenersAttached) {
+  console.log("Attaching event listeners...");
+
+  socketToggle.addEventListener("click", async () => {
+    console.log("socketToggle clicked");
+
+    // Prevent rapid clicking
+    if (isSocketToggleProcessing) {
+      console.log("Socket toggle already processing, skipping...");
+      return;
+    }
+
+    isSocketToggleProcessing = true;
+
+    try {
+      const isConnected = socketToggle.classList.contains("active");
+      if (isConnected) {
+        client.closeSocket();
+        const isRecording = recordingToggle.classList.contains("active");
+      } else {
+        showMessage("Connecting...");
+        client.connect();
+      }
+    } catch (error) {
+      handleError(error, "socket toggle");
+    } finally {
+      // Reset the flag after a short delay to prevent rapid clicking
+      setTimeout(() => {
+        isSocketToggleProcessing = false;
+      }, 500);
+    }
+  });
+
+  recordingToggle.addEventListener("click", async () => {
+    // Prevent rapid clicking
+    if (isRecordingToggleProcessing) {
+      console.log("Recording toggle already processing, skipping...");
+      return;
+    }
+
+    isRecordingToggleProcessing = true;
+
+    try {
       const isRecording = recordingToggle.classList.contains("active");
-    } else {
-      showMessage("Connecting...");
-      client.connect();
+      if (isRecording) {
+        client.stopRecording();
+      } else {
+        await client.startRecording();
+      }
+    } catch (error) {
+      handleError(error, "recording toggle had failed");
+    } finally {
+      // Reset the flag after a short delay to prevent rapid clicking
+      setTimeout(() => {
+        isRecordingToggleProcessing = false;
+      }, 500);
     }
-  } catch (error) {
-    handleError(error, "socket toggle");
-  }
-});
+  });
 
-recordingToggle.addEventListener("click", async () => {
-  const isRecording = recordingToggle.classList.contains("active");
-  try {
-    if (isRecording) {
-      client.stopRecording();
-    } else {
-      await client.startRecording();
+  setKeywordsButton.addEventListener("click", () => {
+    const keywords = keywordsInput.value
+      .split(",")
+      .map((k) => k.trim())
+      .filter((k) => k.length > 0);
+
+    try {
+      client.setKeywords(keywords);
+      showMessage(`Keywords set: ${keywords.join(", ")}`);
+    } catch (error) {
+      handleError(error, "keywords");
     }
-  } catch (error) {
-    handleError(error, "recording toggle had failed");
-  }
-});
+  });
 
-setKeywordsButton.addEventListener("click", () => {
-  const keywords = keywordsInput.value
-    .split(",")
-    .map((k) => k.trim())
-    .filter((k) => k.length > 0);
+  // Add keyboard support for setting keywords
+  keywordsInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      setKeywordsButton.click();
+    }
+  });
 
-  try {
-    client.setKeywords(keywords);
-    showMessage(`Keywords set: ${keywords.join(", ")}`);
-  } catch (error) {
-    handleError(error, "keywords");
-  }
-});
-
-// Add keyboard support for setting keywords
-keywordsInput.addEventListener("keypress", (event) => {
-  if (event.key === "Enter") {
-    setKeywordsButton.click();
-  }
-});
+  eventListenersAttached = true;
+  console.log("Event listeners attached successfully");
+} else {
+  console.log("Event listeners already attached, skipping...");
+}
