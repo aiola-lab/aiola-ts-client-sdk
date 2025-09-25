@@ -1,3 +1,5 @@
+🚧 This SDK page is deprecated. Please refer to aiola-js-sdk. 🚧
+
 # aiOla TypeScript SDK
 
 
